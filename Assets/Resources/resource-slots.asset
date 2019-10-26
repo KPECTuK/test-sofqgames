@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48acbc32c06e4c39b640344579b239eb, type: 3}
+  m_Name: resource-slots
+  m_EditorClassIdentifier: 
+  Slot_0: {fileID: 21300000, guid: 2ebaf9147cbe2e84f993215674a65c68, type: 3}
+  Slot_1: {fileID: 21300000, guid: 2681441233090024b9fc29e62fef45f2, type: 3}
+  Slot_2: {fileID: 21300000, guid: 980ff0a37ff7b5148accfcea5dd69201, type: 3}
+  Slot_3: {fileID: 21300000, guid: 7728e792d2f5cc24a9749d42f5bfa3a5, type: 3}
+  Slot_4: {fileID: 21300000, guid: 29687e2491cbcdd46ac46a88746d273e, type: 3}
+  Slot_5: {fileID: 21300000, guid: 2a99958b0f40e89408fb098e2d499e44, type: 3}
