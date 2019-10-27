@@ -1,6 +1,5 @@
 ﻿using Service;
 using Structure;
-using Utility;
 
 namespace App
 {
@@ -10,8 +9,6 @@ namespace App
 
 		public void Execute(IContext context)
 		{
-			"updating".Log();
-
 			if(_counter % 2 > 0)
 			{
 				context.Resolve<IServiceDistribution>().SetStrategy<ServiceDistributionWin>();

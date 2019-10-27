@@ -18,7 +18,6 @@ namespace Service
 		{
 			model.Speed = Time.deltaTime * (model.Acceleration + model.Friction) + model.Speed;
 			model.Speed = model.Speed < 0f ? 0f : model.Speed;
-			model.Acceleration = 0f;
 
 			var isGoal =
 				DateTime.UtcNow - model.StartStamp > model.DelayPeriod &&
@@ -42,9 +41,8 @@ namespace Service
 
 		public void StateResetRoll(StatePhysics model)
 		{
-			model.Acceleration = 14f + UnityEngine.Random.value * 2f;
 			model.Friction = -.02f;
-			model.Speed = 0f;
+			model.Speed = Time.deltaTime * (14f + UnityEngine.Random.value * 2f + model.Friction);
 		}
 	}
 }

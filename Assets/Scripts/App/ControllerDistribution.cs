@@ -1,8 +1,10 @@
 ﻿using System;
 using Model;
+using Service;
 using Structure;
+using Utility;
 
-namespace Service
+namespace App
 {
 	public class ControllerDistribution : IServiceDistribution
 	{
@@ -33,6 +35,8 @@ namespace Service
 		{
 			_indexCurrent = Array.FindIndex(_strategies, _ => _ is T);
 			_indexCurrent = _indexCurrent < 0 ? 0 : _indexCurrent;
+
+			$"strategy set to: {_strategies[_indexCurrent].GetType().Name}".Log();
 		}
 	}
 }

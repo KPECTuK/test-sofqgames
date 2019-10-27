@@ -64,7 +64,7 @@ namespace Utility
 		{
 			command = command.Accept(source.Acceptable) ? command : null;
 			command?.Execute(context);
-			return context != null;
+			return command != null;
 		}
 
 		public static bool Accept(this ICommand command, Type[] acceptable)

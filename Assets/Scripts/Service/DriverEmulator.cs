@@ -15,9 +15,11 @@ namespace Service
 		private static readonly CancellationTokenSource _source = new CancellationTokenSource();
 
 		private static readonly ConcurrentQueue<ICommand> _commands = new ConcurrentQueue<ICommand>();
+		private static IContext _mainContext;
 
 		public void Start(IContext context)
 		{
+			_mainContext = context;
 			_tread.Start(_source.Token);
 		}
 
@@ -25,11 +27,18 @@ namespace Service
 		{
 			_source.Cancel();
 			_source.Dispose();
+			_mainContext = null;
 		}
 
 		public void Consume(IContext context)
 		{
-			while(_commands.TryDequeue(out var command) && context.Resolve<IScheduler>().Apply(context, command)) { }
+			while(_commands.TryDequeue(out var command))
+			{
+				if(!context.Resolve<IScheduler>().Apply(context, command))
+				{
+					$"command reject, dropping: {command.GetType().Name}".Log();
+				}
+			}
 		}
 
 		private static void Run(object param)
@@ -39,7 +48,8 @@ namespace Service
 			while(!token.IsCancellationRequested)
 			{
 				_timer.Wait(_interval, token);
-				_commands.Enqueue(new CommandSwitchStrategy());
+				// no need to sync
+				_commands.Enqueue(_mainContext.Resolve<CommandSwitchStrategy>());
 			}
 		}
 	}
