@@ -1,9 +1,9 @@
-﻿namespace Structure
+﻿using System;
+
+namespace Structure
 {
 	public interface IScheduler
 	{
-		bool Apply(ICommand command);
-
-		void NotifyProcessComplete();
+		Type[] Acceptable { get; }
 	}
 }

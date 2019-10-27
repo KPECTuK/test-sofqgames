@@ -1,5 +1,4 @@
-﻿using System;
-using Structure;
+﻿using Structure;
 
 namespace App
 {
@@ -7,7 +6,7 @@ namespace App
 	{
 		public void Execute(IContext context)
 		{
-			throw new NotImplementedException();
+			context.Resolve<IFSM>().RecycleProcessForce(context);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Model;
 using Rig;
+using Service;
 using Structure;
 using UnityEngine;
 using Utility;
@@ -21,21 +22,26 @@ namespace App
 			AppendSingleton(typeof(ControllerApp), controller);
 			AppendSingleton(typeof(ControllerScreen), screenController);
 			AppendSingleton(typeof(ContainerApp), new ContainerApp());
-			AppendSingleton(typeof(IPhysics), new SimplePhysics());
+			AppendSingleton(typeof(IServicePhysics), new ServicePhysicsSimple(Extensions.BARRELS_I));
+			AppendSingleton(typeof(IServiceDistribution), new ControllerDistribution(this));
 			//
-			AppendSingleton(typeof(CommandUpdate), new CommandUpdate());
+			AppendSingleton(typeof(CommandSwitchStrategy), new CommandSwitchStrategy());
 			AppendSingleton(typeof(CommandBet), new CommandBet());
 			AppendSingleton(typeof(CommandSpin), new CommandSpin());
 			//
-			var fsm = new ControllerFSM(this);
+			var fsm = new ControllerFSM();
 			AppendProvider(typeof(IScheduler), fsm);
 			AppendProvider(typeof(IProcess), fsm);
-			var animator = new ControllerAnimation();
+			AppendSingleton(typeof(IFSM), fsm);
+			//
+			var animator = new ControllerAnimation(this);
 			AppendProvider(typeof(MediatorCoins), animator);
 			AppendProvider(typeof(MediatorBet), animator);
 			AppendProvider(typeof(MediatorSpinsAvailable), animator);
 			AppendProvider(typeof(MediatorSpinsRestore), animator);
 			AppendProvider(typeof(MediatorBarrels), animator);
+			//
+			AppendSingleton(typeof(DriverEmulator), new DriverEmulator());
 		}
 	}
 }

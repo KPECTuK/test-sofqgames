@@ -6,17 +6,17 @@ namespace App
 {
 	public class ControllerAnimation : IContext
 	{
-		private readonly IMediatorRig[] _mediators;
+		private readonly IMediator[] _mediators;
 
-		public ControllerAnimation()
+		public ControllerAnimation(IContext context)
 		{
-			_mediators = new IMediatorRig[]
+			_mediators = new IMediator[]
 			{
+				new MediatorBarrels(context),
 				new MediatorCoins(),
 				new MediatorBet(),
 				new MediatorSpinsAvailable(),
 				new MediatorSpinsRestore(),
-				new MediatorBarrels(),
 			};
 		}
 

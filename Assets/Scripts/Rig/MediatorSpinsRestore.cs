@@ -4,7 +4,7 @@ using Structure;
 
 namespace Rig
 {
-	public class MediatorSpinsRestore : IMediatorRig
+	public class MediatorSpinsRestore : IMediator
 	{
 		private TimeSpan _targetPeriod;
 		private int _targetSpins;

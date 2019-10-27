@@ -1,10 +1,18 @@
 ﻿using System;
+using System.Linq;
+using Model;
+using Structure;
 using UnityEngine;
 
 namespace Utility
 {
 	public static class Extensions
 	{
+		// link to all code settlement for barrels number
+		public const int BARRELS_I = 3;
+
+		private static readonly System.Random _random = new System.Random();
+
 		public static T FindDownwards<T>(this Component source, Predicate<T> predicate) where T : Component
 		{
 			predicate = predicate ?? (_ => true);
@@ -50,6 +58,39 @@ namespace Utility
 					return null;
 				}
 			}
+		}
+
+		public static bool Apply(this IScheduler source, IContext context, ICommand command)
+		{
+			command = command.Accept(source.Acceptable) ? command : null;
+			command?.Execute(context);
+			return context != null;
+		}
+
+		public static bool Accept(this ICommand command, Type[] acceptable)
+		{
+			var result = false;
+			var type = command.GetType();
+			for(var index = 0; index < acceptable.Length; index++)
+			{
+				result = result || acceptable[index].IsAssignableFrom(type);
+			}
+			return result;
+		}
+
+		public static bool IsSpinDenied(this ContainerApp source)
+		{
+			return source.Coins < source.Bet || source.SpinsAvailable <= 0;
+		}
+
+		public static bool IsRolling(this ContainerApp source)
+		{
+			return source.PhysicsState.Sum(_ => _.Speed) > 0f;
+		}
+
+		public static TimeSpan Random(this TimeSpan cap)
+		{
+			return TimeSpan.FromMilliseconds(cap.TotalMilliseconds * _random.NextDouble());
 		}
 
 		public static Rect ShiftUp(this Rect source)

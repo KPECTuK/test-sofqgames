@@ -3,7 +3,7 @@ using Structure;
 
 namespace Rig
 {
-	public class MediatorBet : IMediatorRig
+	public class MediatorBet : IMediator
 	{
 		private int _target;
 		private int _current;

@@ -2,6 +2,10 @@
 {
 	public interface IProcess
 	{
-		bool AssertComplete();
+		bool TryStart(IContext context);
+
+		bool TryStop(IContext context);
+
+		void StopForce(IContext context);
 	}
 }

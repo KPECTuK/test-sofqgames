@@ -3,7 +3,8 @@ using Rig;
 
 namespace Structure
 {
-	public interface IMediatorRig
+	// UI animation
+	public interface IMediator
 	{
 		// better to keep week, but easy to pass - ControllerScreen { .. }
 

@@ -1,4 +1,5 @@
 ﻿using Rig;
+using Service;
 using Structure;
 using UnityEngine;
 
@@ -13,15 +14,22 @@ namespace App
 			Composition = new CompositionApp(this);
 			// goodbye Unity
 			Composition.Resolve<ControllerScreen>().enabled = true;
-			Composition.Resolve<IScheduler>().Apply(new CommandUpdate());
 		}
 
 		private void LateUpdate()
 		{
-			if(Composition.Resolve<IProcess>().AssertComplete())
-			{
-				Composition.Resolve<IScheduler>().NotifyProcessComplete();
-			}
+			Composition.Resolve<DriverEmulator>().Consume(Composition);
+			Composition.Resolve<IFSM>().RecycleProcess(Composition);
+		}
+
+		private void OnEnable()
+		{
+			Composition.Resolve<DriverEmulator>().Start(Composition);
+		}
+
+		private void OnDisable()
+		{
+			Composition.Resolve<DriverEmulator>().Stop(Composition);
 		}
 	}
 }

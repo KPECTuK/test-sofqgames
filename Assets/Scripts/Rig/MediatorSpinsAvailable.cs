@@ -3,7 +3,7 @@ using Structure;
 
 namespace Rig
 {
-	public class MediatorSpinsAvailable : IMediatorRig
+	public class MediatorSpinsAvailable : IMediator
 	{
 		private int _targetAvailable;
 		private int _currentAvailable;

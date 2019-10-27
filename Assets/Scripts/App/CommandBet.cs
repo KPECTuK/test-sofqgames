@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Model;
 using Structure;
 
 namespace App
@@ -7,7 +7,11 @@ namespace App
 	{
 		public void Execute(IContext context)
 		{
-			throw new NotImplementedException();
+			var data = context.Resolve<ContainerApp>();
+			if(data.Bet < data.Coins && data.Bet < data.BetMax)
+			{
+				data.Bet += 1;
+			}
 		}
 	}
 }

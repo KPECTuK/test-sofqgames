@@ -21,7 +21,7 @@ namespace Rig
 		//
 		public Image ProgressSpin { get; private set; }
 		// mutable - todo: protect
-		public ControllerBarrel[] ControllerBarrel { get; } = new ControllerBarrel[3];
+		public ControllerBarrel[] ControllerBarrel { get; } = new ControllerBarrel[Extensions.BARRELS_I];
 
 		// unstable
 		private IContext _context;
@@ -45,9 +45,11 @@ namespace Rig
 				//
 				ProgressSpin = transform.FindDownwards<Image>(_ => _.name == "group-spins") ?? throw new Exception("not found: group-spins");
 				//
-				ControllerBarrel[0] = transform.FindDownwards<Transform>(_ => _.name == "group-barrel-00")?.gameObject.AddComponent<ControllerBarrel>() ?? throw new Exception("not found: group-barrel-00");
-				ControllerBarrel[1] = transform.FindDownwards<Transform>(_ => _.name == "group-barrel-01")?.gameObject.AddComponent<ControllerBarrel>() ?? throw new Exception("not found: group-barrel-01");
-				ControllerBarrel[2] = transform.FindDownwards<Transform>(_ => _.name == "group-barrel-02")?.gameObject.AddComponent<ControllerBarrel>() ?? throw new Exception("not found: group-barrel-02");
+				for(var index = 0; index < ControllerBarrel.Length; index++)
+				{
+					var source = $"group-barrel-{index:00}";
+					ControllerBarrel[index] = transform.FindDownwards<Transform>(_ => _.name == source)?.gameObject.AddComponent<ControllerBarrel>() ?? throw new Exception($"not found: {source}");
+				}
 			}
 			catch(Exception exception)
 			{
@@ -57,7 +59,6 @@ namespace Rig
 
 		protected override void OnEnable()
 		{
-			//! should resume
 			base.OnEnable();
 
 			_context = transform.FindUpwards<ControllerApp>(null)?.Composition;
@@ -67,48 +68,20 @@ namespace Rig
 				return;
 			}
 
-			if(ButtonBet)
-			{
-				ButtonBet.onClick.AddListener(() => _context.Resolve<IScheduler>().Apply(_context.Resolve<CommandBet>()));
-			}
-
-			if(ButtonSpin)
-			{
-				ButtonSpin.onClick.AddListener(() => _context.Resolve<IScheduler>().Apply(_context.Resolve<CommandSpin>()));
-			}
-
 			var container = _context.Resolve<ContainerApp>();
-			if(container == null)
-			{
-				return;
-			}
 
 			_context.Resolve<MediatorBarrels>().UpdateForce(container, this);
-			// top down
 			_context.Resolve<MediatorCoins>().UpdateForce(container, this);
 			_context.Resolve<MediatorBet>().UpdateForce(container, this);
 			_context.Resolve<MediatorSpinsAvailable>().UpdateForce(container, this);
 			_context.Resolve<MediatorSpinsRestore>().UpdateForce(container, this);
 
-			ControllerBarrel[0].enabled = true;
-			ControllerBarrel[1].enabled = true;
-			ControllerBarrel[2].enabled = true;
+			Array.ForEach(ControllerBarrel, _ => _.enabled = true);
 		}
 
 		protected override void OnDisable()
 		{
-			//! should pause
 			base.OnDisable();
-
-			if(ButtonBet)
-			{
-				ButtonBet.onClick.RemoveAllListeners();
-			}
-
-			if(ButtonSpin)
-			{
-				ButtonSpin.onClick.RemoveAllListeners();
-			}
 
 			_context = null;
 		}
@@ -121,12 +94,12 @@ namespace Rig
 				return;
 			}
 
-			_context.Resolve<MediatorBarrels>()?.Update(container, this);
-			// top down
-			_context.Resolve<MediatorCoins>()?.Update(container, this);
-			_context.Resolve<MediatorBet>()?.Update(container, this);
-			_context.Resolve<MediatorSpinsAvailable>()?.Update(container, this);
-			_context.Resolve<MediatorSpinsRestore>()?.Update(container, this);
+			// same screen
+			_context.Resolve<MediatorBarrels>().Update(container, this);
+			_context.Resolve<MediatorCoins>().Update(container, this);
+			_context.Resolve<MediatorBet>().Update(container, this);
+			_context.Resolve<MediatorSpinsAvailable>().Update(container, this);
+			_context.Resolve<MediatorSpinsRestore>().Update(container, this);
 		}
 	}
 }
